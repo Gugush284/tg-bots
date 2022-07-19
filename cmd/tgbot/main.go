@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 
+	tgserver "shekosaurus/internal/bot"
 	"shekosaurus/internal/configs"
 
 	"github.com/BurntSushi/toml"
@@ -13,7 +14,7 @@ var configPath string
 var sessionKeyPath string
 
 func init() {
-	flag.StringVar(&configPath, "config-path", "configs/apiserver.toml", "path to config file")
+	flag.StringVar(&configPath, "config-path", "internal/configs/tgbot.toml", "path to config file")
 }
 
 func main() {
@@ -25,8 +26,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = toml.DecodeFile(sessionKeyPath, config)
-	if err != nil {
-		log.Fatal(err)
-	}
+	tgserver.Start(config)
 }
