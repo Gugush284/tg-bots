@@ -45,39 +45,3 @@ func Serve(
 		}
 	}
 }
-
-func handler(bot *tgbotapi.BotAPI,
-	update tgbotapi.Update,
-	logger *logrus.Logger,
-) {
-	switch update.Message.Text {
-	case "/start":
-		logger.Info("/start")
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Привет, любимый щекозавр")
-		bot.Send(msg)
-
-	case "🦔":
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Что щекозавр?")
-		bot.Send(msg)
-
-	case "❤️":
-
-	case "Ёжик":
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Что щекозавр?")
-		bot.Send(msg)
-
-	case "ёжик":
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Что щекозавр?")
-		bot.Send(msg)
-
-	case "/compliment":
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Это пока не реализовано. Подожди")
-		bot.Send(msg)
-
-	default:
-		logger.Info(update.Message.Text)
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Я такого не знаю(")
-		bot.Send(msg)
-	}
-}
