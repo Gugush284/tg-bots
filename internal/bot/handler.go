@@ -12,37 +12,12 @@ func handler(bot *tgbotapi.BotAPI,
 	switch update.Message.Text {
 	case "/start":
 		logger.Info("/start")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Привет, любимый щекозавр")
-		bot.Send(msg)
-
-	case "🦔":
-		logger.Info("Смайл ежа")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Что щекозавр?")
-		bot.Send(msg)
-
-	case "❤️":
-		logger.Info("Смайл сердца")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "❤️")
-		bot.Send(msg)
-
-	case "😘":
-		logger.Info("Смайл поцелуй")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "И я тебя")
-		bot.Send(msg)
-
-	case "Ёжик":
-		logger.Info("Ёжик")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Что любимая?")
-		bot.Send(msg)
-
-	case "ёжик":
-		logger.Info("ёжик")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Я Ёжик")
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Привет!")
 		bot.Send(msg)
 
 	case "/compliment":
 		logger.Info("/compliment")
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Это пока не реализовано. Подожди")
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, complimentApi(logger))
 		bot.Send(msg)
 
 	default:
@@ -50,4 +25,5 @@ func handler(bot *tgbotapi.BotAPI,
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Я такого не знаю(")
 		bot.Send(msg)
 	}
+	logger.Info("Finished processing the request")
 }
