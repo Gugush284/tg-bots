@@ -1,0 +1,2 @@
+To use this app go to  https://my.telegram.org/auth?to=apps and get api_id, api_hash. Then insert them into the program. Also add your phone number and users. Then change the message
+Then start the main.py
