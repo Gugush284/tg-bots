@@ -1,5 +1,5 @@
 # tg-bot
-Tg bot for my girlfriend - in progress
+My first tg bot
 ## List of packages used:
 - github.com/BurntSushi/toml, The MIT License, TOML authors
 -	github.com/Syfaro/telegram-bot-api, The MIT License, Syfaro
