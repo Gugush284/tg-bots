@@ -1,45 +1,80 @@
 from telethon.sync import TelegramClient
-from telethon.tl.types import InputPeerUser
 from telethon.errors.rpcerrorlist import PeerFloodError
 import sys
-import csv
-import random
 import time
+import os
+import tomllib
+import pandas as pd
 
-api_id = ...
-api_hash = ''
-phone = ''
- 
-SLEEP_TIME = 30
-client = TelegramClient(phone, api_id, api_hash)
- 
-client.connect()
-if not client.is_user_authorized():
-    client.send_code_request(phone)
-    client.sign_in(phone, input('Enter the code: '))
+def connection(phone, api_id, api_hash):
+    client = TelegramClient(phone, api_id, api_hash)
+    
+    client.connect()
+    if not client.is_user_authorized():
+        client.send_code_request(phone)
+        client.sign_in(phone, input('Enter the code: '))
 
-users = ['']
+    return client
+
+with open(os.getcwd()+"\config.toml","rb") as toml:
+    config = tomllib.load(toml)
+
+api_id = config['api_id']
+api_hash = config['api_hash']
+SLEEP_TIME = 5
+CLIENT_PER_PHONE = 2
  
-message = "Test message"
+data = pd.read_csv(os.getcwd()+'\input.csv', names=['tgId'])
+phones = pd.read_csv(os.getcwd()+'\phones.csv', names=['phone'])
+
+data_size = data['tgId'].size - 1
+user = 0
+
+phone_size = phones['phone'].size
+phone_id = 0
+
+counter = 0
+
+phone = str(phones['phone'][phone_id])
+client = connection(phone, api_id, api_hash)
+
+while user <= data_size:
+    username = str(data['tgId'][user])
  
-for user in users:
-    if user == "":
+    message = "Test message"
+ 
+    if username == "":
         continue
 
     try:
-        print("Get:", user)
-        receiver = client.get_input_entity(user)
-        print("Sending Message to:", user)
-        client.send_message(receiver, message.format(user))
+        print("Get:", username)
+        receiver = client.get_input_entity(username)
+        print("Sending Message to:", username)
+        client.send_message(receiver, message.format(username))
         print("Waiting {} seconds".format(SLEEP_TIME))
         time.sleep(SLEEP_TIME)
     except PeerFloodError:
         print("Getting Flood Error from telegram. Script is stopping now. Please try again after some time.")
         client.disconnect()
-        sys.exit()
+        counter += CLIENT_PER_PHONE
     except Exception as e:
         print("Error:", e)
         print("Trying to continue...")
-        continue
-client.disconnect()
-print("Done. Message sent to all users.")
+
+    user += 1
+    counter += 1
+
+    if (counter // CLIENT_PER_PHONE) > phone_id: 
+        client.disconnect()
+
+        phone_id = counter // CLIENT_PER_PHONE
+        if phone_id == phone_size:
+            print("No more phones")
+            sys.exit
+
+        phone = str(phones['phone'][phone_id])
+
+        client = connection(phone, api_id, api_hash)
+    print("Done. Message sent to all users.")
+
+print(user)
