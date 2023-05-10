@@ -41,7 +41,8 @@ client = connection(phone, api_id, api_hash)
 while user <= data_size:
     username = str(data['tgId'][user])
  
-    message = "Test message"
+    message = '<a href="https://t.me/MariaSuhorukih_newbot">Подпишись и забери подарок</a>'
+    photo = '\photo.jpg'
  
     if username == "":
         continue
@@ -50,7 +51,8 @@ while user <= data_size:
         print("Get:", username)
         receiver = client.get_input_entity(username)
         print("Sending Message to:", username)
-        client.send_message(receiver, message.format(username))
+        client.send_file(receiver, os.getcwd()+photo)
+        client.send_message(receiver, message, parse_mode="html")
         print("Waiting {} seconds".format(SLEEP_TIME))
         time.sleep(SLEEP_TIME)
     except PeerFloodError:
